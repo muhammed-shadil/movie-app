@@ -53,13 +53,32 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(left: 30),
+                        margin: const EdgeInsets.only(left: 30),
                         // color: Color.fromARGB(66, 224, 9, 9),
                         width: MediaQuery.of(context).size.width,
                         height: MediaQuery.of(context).size.height,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            SizedBox(
+                              height: 50,
+                              width: MediaQuery.of(context).size.width,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: moviedetail.genres.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(6),
+                                      color: const Color.fromARGB(255, 218, 217, 214),
+                                    ),
+                                    padding: const EdgeInsets.all(8),
+                                    margin: const EdgeInsets.all(6),
+                                    child: Text(moviedetail.genres[index]),
+                                  );
+                                },
+                              ),
+                            ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(

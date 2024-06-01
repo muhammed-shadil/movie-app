@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:movie_app/model/movie_details_model.dart';
 import 'package:movie_app/model/movie_model.dart';
 import 'package:movie_app/services/constants.dart';
 import 'package:http/http.dart' as http;
@@ -12,6 +13,8 @@ class Api {
 
   final topRatedApiUrl =
       "https://api.themoviedb.org/3/movie/top_rated?api_key=$apiKey";
+  final moviesdetailsApiUrl =
+      "https://api.themoviedb.org/3/movie/929590?api_key=$apiKey";
 
   Future<List<Movie>> getUpcomingMovies() async {
     final response = await http.get(Uri.parse(upComingApiUrl));
@@ -46,5 +49,27 @@ class Api {
     }
   }
 
+  Future<MovieDetails> getMoviesdetails(int movieId) async {
+    print("dddddddddddd$movieId");
+    final response = await http.get(Uri.parse(
+        "https://api.themoviedb.org/3/movie/$movieId?api_key=$apiKey"));
+    print(response.statusCode);
 
+    if (response.statusCode == 200) {
+      print(response.body);
+      final Map<String, dynamic> data = json.decode(response.body);
+      print(data);
+      MovieDetails movie = MovieDetails.fromMap(data);
+      return movie;
+      // final List<dynamic> data = json.decode(response.body);
+
+      // List<MovieDetails> movies =
+      //     // data.map((movie) => MovieDetails.fromMap(movie))
+      //     .toList();
+      //       print("rrrrrrrrrrrrrrrrr$movies");
+      // return ;
+    } else {
+      throw Exception("failed to load upcoming movies");
+    }
+  }
 }

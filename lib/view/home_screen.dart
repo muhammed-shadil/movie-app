@@ -12,10 +12,14 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late Future<List<Movie>> upcomingMovies;
+  late Future<List<Movie>> popularMovies;
+  late Future<List<Movie>> topratedMovies;
 
   @override
   void initState() {
     upcomingMovies = Api().getUpcomingMovies();
+    popularMovies = Api().getPopularMovies();
+    topratedMovies = Api().getTopratedMovies();
     super.initState();
   }
 
@@ -25,15 +29,22 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {},
-          icon: Icon(Icons.menu),
+          icon: const Icon(Icons.menu),
         ),
-        title: Text("data"),
+        title: const Text("CINEMA"),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("upcoming"),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
+              child: Text(
+                "Upcoming Movies",
+                style: TextStyle(fontSize: 18),
+              ),
+            ),
             FutureBuilder(
               future: upcomingMovies,
               builder: (context, snapshot) {
@@ -52,15 +63,145 @@ class _HomeScreenState extends State<HomeScreen> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12)),
                         child: Image.network(
-                            "https://image.tmdb.org/t/p/original/${movie.backDropPath}",fit:BoxFit.fill,),
+                          "https://image.tmdb.org/t/p/original/${movie.posterPath}",
+                          fit: BoxFit.fill,
+                        ),
                       );
                     },
                     options: CarouselOptions(
-                        autoPlay: true,
-                        enlargeCenterPage: true,
-                        aspectRatio: 1.6,
-                        autoPlayInterval: const Duration(seconds: 3)));
+                      height: 350,
+                      aspectRatio: 16 / 9,
+                      viewportFraction: 1,
+                      initialPage: 0,
+                      enableInfiniteScroll: true,
+                      reverse: false,
+                      autoPlay: true,
+                      autoPlayInterval: const Duration(seconds: 3),
+                      autoPlayAnimationDuration:
+                          const Duration(milliseconds: 800),
+                      autoPlayCurve: Curves.fastOutSlowIn,
+                      enlargeCenterPage: true,
+                      enlargeFactor: 0.3,
+                      scrollDirection: Axis.horizontal,
+                    ));
               },
+            ),
+            // Container(color: Colors.amber,width: 110,height: 50,)
+
+            const Padding(
+              padding: EdgeInsets.all(15),
+              child: Text(
+                "Popular Movies",
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+
+            Container(
+              height: 180,
+              // color: const Color.fromARGB(255, 80, 79, 76),
+              child: FutureBuilder(
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  final movies = snapshot.data!;
+                  return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: movies.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final movie = movies[index];
+                      return Container(width: 110,
+                        child: Column(
+                          children: [
+                            Container(
+                              // color: Colors.amber,
+                              margin: const EdgeInsets.all(8),
+                        
+                              //  MediaQuery.of(context).size.height*0.1,
+                              width: 110,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(15),
+                                child: Image.network(
+                                  "https://image.tmdb.org/t/p/original/${movie.backDropPath}",
+                                  width: double.infinity,
+                                  height: 120,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              //  MediaQuery.of(context).size.width*0.1,
+                            ),
+                            Text(
+                              movie.title,
+                             
+                              textAlign: TextAlign.center,
+                            )
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+                future: popularMovies,
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                "Top Rated Movies",
+                style: TextStyle(fontSize: 18),
+              ),
+            ),
+
+            Container(margin: EdgeInsets.only(bottom: 10),
+              height: 200,
+              // color: const Color.fromARGB(255, 80, 79, 76),
+              child: FutureBuilder(
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  final movies = snapshot.data!;
+                  return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: movies.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final movie = movies[index];
+                      return Container(width: 110,
+                        child: Column(
+                          children: [
+                            Container(
+                              // color: Colors.amber,
+                              margin: const EdgeInsets.all(8),
+                            
+                              //  MediaQuery.of(context).size.height*0.1,
+                              width: 110,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(15),
+                                child: Image.network(
+                                  "https://image.tmdb.org/t/p/original/${movie.backDropPath}",
+                                  width: double.infinity,
+                                  height: 120,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              //  MediaQuery.of(context).size.width*0.1,
+                            ), Text(
+                                movie.title,
+                               
+                                textAlign: TextAlign.center,
+                              )
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+                future: topratedMovies,
+              ),
             ),
           ],
         ),

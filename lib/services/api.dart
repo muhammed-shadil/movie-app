@@ -23,4 +23,28 @@ class Api {
       throw Exception("failed to load upcoming movies");
     }
   }
+
+  Future<List<Movie>> getPopularMovies() async {
+    final response = await http.get(Uri.parse(popularApiUrl));
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body)['results'];
+      List<Movie> movies = data.map((movie) => Movie.fromMap(movie)).toList();
+      return movies;
+    } else {
+      throw Exception("failed to load upcoming movies");
+    }
+  }
+
+  Future<List<Movie>> getTopratedMovies() async {
+    final response = await http.get(Uri.parse(topRatedApiUrl));
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body)['results'];
+      List<Movie> movies = data.map((movie) => Movie.fromMap(movie)).toList();
+      return movies;
+    } else {
+      throw Exception("failed to load upcoming movies");
+    }
+  }
+
+
 }

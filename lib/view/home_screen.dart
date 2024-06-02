@@ -27,8 +27,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(backgroundColor: Colors.black,
-      appBar: AppBar(foregroundColor: Colors.white,backgroundColor: Colors.black,
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        foregroundColor: Colors.white,
+        backgroundColor: Colors.black,
         leading: IconButton(
           onPressed: () {},
           icon: const Icon(Icons.menu),
@@ -51,8 +54,11 @@ class _HomeScreenState extends State<HomeScreen> {
               future: upcomingMovies,
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
+                  return const SizedBox(
+                    height: 350,
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
                   );
                 }
                 final movies = snapshot.data!;
@@ -60,13 +66,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemCount: movies.length,
                     itemBuilder: (context, index, movieIndex) {
                       final movie = movies[index];
-                      return Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12)),
-                        child: Image.network(
-                          "https://image.tmdb.org/t/p/original/${movie.posterPath}",
-                          fit: BoxFit.fill,
+                      return GestureDetector(
+                        onTap: () {
+                          print(movie.id);
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12)),
+                          child: Image.network(
+                            "https://image.tmdb.org/t/p/original/${movie.posterPath}",
+                            fit: BoxFit.fill,
+                          ),
                         ),
                       );
                     },
@@ -102,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             Container(
-              height: 180,
+              height: 185,
               // color: const Color.fromARGB(255, 80, 79, 76),
               child: FutureBuilder(
                 builder: (context, snapshot) {
@@ -117,32 +128,41 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemCount: movies.length,
                     itemBuilder: (BuildContext context, int index) {
                       final movie = movies[index];
-                      return Container(
-                        width: 110,
-                        child: Column(
-                          children: [
-                            Container(
-                              // color: Colors.amber,
-                              margin: const EdgeInsets.all(8),
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) =>
+                                      MovieDetailsScreen(wholedetails: movie)));
+                        },
+                        child: Container(
+                          width: 110,
+                          child: Column(
+                            children: [
+                              Container(
+                                // color: Colors.amber,
+                                margin: const EdgeInsets.all(8),
 
-                              //  MediaQuery.of(context).size.height*0.1,
-                              width: 110,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(15),
-                                child: Image.network(
-                                  "https://image.tmdb.org/t/p/original/${movie.backDropPath}",
-                                  width: double.infinity,
-                                  height: 120,
-                                  fit: BoxFit.cover,
+                                //  MediaQuery.of(context).size.height*0.1,
+                                width: 110,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: Image.network(
+                                    "https://image.tmdb.org/t/p/original/${movie.backDropPath}",
+                                    width: double.infinity,
+                                    height: 120,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
+                                //  MediaQuery.of(context).size.width*0.1,
                               ),
-                              //  MediaQuery.of(context).size.width*0.1,
-                            ),
-                            Text(
-                              movie.title,
-                              textAlign: TextAlign.center,
-                            )
-                          ],
+                              Text(
+                                movie.title,
+                                textAlign: TextAlign.center,
+                              )
+                            ],
+                          ),
                         ),
                       );
                     },

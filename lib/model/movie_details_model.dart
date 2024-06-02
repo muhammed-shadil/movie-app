@@ -1,4 +1,6 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 class MovieDetails {
+  final bool adult;
   final String title;
   final String backDropPath;
   final String posterPath;
@@ -9,7 +11,10 @@ class MovieDetails {
   final int revenue;
   final double voteAverage;
   final List<String> genres;
+
+  final List<String> production;
   MovieDetails({
+    required this.adult,
     required this.title,
     required this.backDropPath,
     required this.posterPath,
@@ -20,10 +25,13 @@ class MovieDetails {
     required this.revenue,
     required this.voteAverage,
     required this.genres,
+    required this.production,
   });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'production': production,
+      'adult': adult,
       'title': title,
       'bachDropPath': backDropPath,
       'overview': overview,
@@ -42,8 +50,12 @@ class MovieDetails {
     List<String> genreNames =
         genreList.map((genre) => genre['name'] as String).toList();
 
+    var productionlist = map['production_companies'] as List;
+    List<String> productionNames =
+        productionlist.map((genre) => genre['logo_path'] as String).toList();
+
     return MovieDetails(
-      title: map['original_title'],
+      title: map['title'],
       backDropPath: map['backdrop_path'],
       overview: map['overview'],
       releaseDate: map['release_date'],
@@ -53,6 +65,8 @@ class MovieDetails {
       voteAverage: map['vote_average'],
       genres: genreNames,
       posterPath: map['poster_path'],
+      adult: map['adult'],
+      production: productionNames,
     );
   }
 }

@@ -28,13 +28,17 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       backgroundColor: Colors.black,
       body: SafeArea(
         child: FutureBuilder(
             future: moviesdetails,
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(
+                    child: CircularProgressIndicator(
+                  color: Colors.white,
+                ));
               }
               final moviedetail = snapshot.data!;
               print(moviedetail.posterPath);
@@ -48,7 +52,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                         clipBehavior: Clip.none,
                         children: [
                           SizedBox(
-                            height: 300,
+                            height: MediaQuery.of(context).size.height * 0.5,
                             child: Stack(
                               children: [
                                 Positioned.fill(
@@ -82,7 +86,6 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                               child: Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  color: Colors.amber,
                                 ),
                                 width: 90,
                                 height: 120,
@@ -104,7 +107,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SizedBox(
-                              height: 20,
+                              height: 33,
                             ),
                             SizedBox(
                               height: 50,
@@ -140,7 +143,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 4),
                               margin: const EdgeInsets.only(top: 5),
-                              width: MediaQuery.of(context).size.width * 0.6,
+                              width: MediaQuery.of(context).size.width * 0.9,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(30),
                                   color: const Color.fromARGB(255, 59, 58, 58)),
@@ -163,7 +166,22 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                                     color: Color.fromARGB(255, 232, 185, 46),
                                     size: 17,
                                   ),
-                                  Text(moviedetail.voteAverage.toString())
+                                  Text(moviedetail.voteAverage.toString()),
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.2,
+                                  ),
+                                  moviedetail.adult
+                                      ? Container(
+                                          padding: const EdgeInsets.all(2),
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Colors.red)),
+                                          child: const Text(
+                                            "18+",
+                                            style: TextStyle(color: Colors.red),
+                                          ))
+                                      : Container()
                                 ],
                               ),
                             ),
@@ -203,9 +221,30 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                               ),
                             ),
                             Text(moviedetail.revenue.toString()),
+                            SizedBox(
+                              height: 100,
+                              width: MediaQuery.of(context).size.width,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: moviedetail.production.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                    padding: const EdgeInsets.all(8),
+                                    margin: const EdgeInsets.all(6),
+                                    child: Image.network(
+                                      "https://image.tmdb.org/t/p/original/${moviedetail.production[index]}",
+                                      fit: BoxFit.fill,
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
                           ],
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),

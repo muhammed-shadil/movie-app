@@ -27,8 +27,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+    return Scaffold(backgroundColor: Colors.black,
+      appBar: AppBar(foregroundColor: Colors.white,backgroundColor: Colors.black,
         leading: IconButton(
           onPressed: () {},
           icon: const Icon(Icons.menu),

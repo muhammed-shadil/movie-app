@@ -1,14 +1,15 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 import 'package:movie_app/model/movie_details_model.dart';
 import 'package:movie_app/model/movie_model.dart';
 import 'package:movie_app/services/api.dart';
 
 class MovieDetailsScreen extends StatefulWidget {
   const MovieDetailsScreen({
-    Key? key,
+    super.key,
     required this.wholedetails,
-  }) : super(key: key);
+  });
   final Movie wholedetails;
 
   @override
@@ -29,6 +30,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body: SafeArea(
         child: FutureBuilder(
             future: moviesdetails,
@@ -38,18 +40,39 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                 return const Center(child: CircularProgressIndicator());
               }
               final moviedetail = snapshot.data!;
-              return Container(
+              return SizedBox(
                 // color: Colors.amber,
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      Container(
+                      SizedBox(
                         height: 300,
-                        child: Image.network(
-                          "https://image.tmdb.org/t/p/original/${moviedetail.backDropPath}",
-                          fit: BoxFit.fill,
+                        child: Stack(
+                          children: [
+                            Positioned.fill(
+                              child: Image.network(
+                                "https://image.tmdb.org/t/p/original/${moviedetail.backDropPath}",
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                            Positioned.fill(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Colors.transparent,
+                                      Colors.transparent,
+                                      Colors.black.withOpacity(0.8),
+                                    ],
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       Container(
@@ -70,7 +93,8 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                                   return Container(
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(6),
-                                      color: const Color.fromARGB(255, 218, 217, 214),
+                                      color:
+                                          const Color.fromARGB(255, 61, 61, 60),
                                     ),
                                     padding: const EdgeInsets.all(8),
                                     margin: const EdgeInsets.all(6),
@@ -83,51 +107,70 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
                                 moviedetail.title,
-                                style: TextStyle(fontSize: 25),
+                                style: const TextStyle(
+                                    fontFamily: "lato",
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.w600),
                               ),
                             ),
                             Row(
                               children: [
-                                Icon(Icons.timer),
+                                const Icon(
+                                  Icons.av_timer,
+                                  size: 20,
+                                ),
                                 Padding(
                                   padding: const EdgeInsets.all(5.0),
                                   child: Text(moviedetail.runtime.toString()),
                                 ),
-                                Text("minutes"),
-                                SizedBox(
+                                const Text("minutes"),
+                                const SizedBox(
                                   width: 40,
                                 ),
-                                Icon(Icons.star),
+                                const Icon(
+                                  Icons.star,
+                                  color: Color.fromARGB(255, 232, 185, 46),
+                                  size: 17,
+                                ),
                                 Text(moviedetail.voteAverage.toString())
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 20,
                             ),
-                            Text("Release date"),
+                            const Text("Release date"),
                             Text(moviedetail.releaseDate),
-                            SizedBox(
+                            const SizedBox(
                               height: 20,
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
+                            const Padding(
+                              padding: EdgeInsets.all(8.0),
                               child: Text(
                                 "Story line",
-                                style: TextStyle(fontSize: 20),
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.w600),
                               ),
                             ),
-                            Text(moviedetail.overview),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text("Budget"),
+                            Text(
+                              moviedetail.overview,
+                              style: const TextStyle(height: 1.3, fontSize: 16),
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 8.0),
+                              child: Text(
+                                "Budget",
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
                             ),
                             Text(moviedetail.budget.toString()),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text("revenu"),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 8.0),
+                              child: Text(
+                                "Revenu",
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
                             ),
                             Text(moviedetail.revenue.toString()),
-                            Text(moviedetail.revenue.toString())
                           ],
                         ),
                       )

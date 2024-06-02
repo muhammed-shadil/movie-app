@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:movie_app/model/movie_details_model.dart';
 import 'package:movie_app/model/movie_model.dart';
 import 'package:movie_app/services/api.dart';
@@ -36,53 +34,78 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
             future: moviesdetails,
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
-                print("yyyyyyyyyyyyyyyyyyyyyyyy");
                 return const Center(child: CircularProgressIndicator());
               }
               final moviedetail = snapshot.data!;
+              print(moviedetail.posterPath);
               return SizedBox(
-                // color: Colors.amber,
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      SizedBox(
-                        height: 300,
-                        child: Stack(
-                          children: [
-                            Positioned.fill(
-                              child: Image.network(
-                                "https://image.tmdb.org/t/p/original/${moviedetail.backDropPath}",
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                            Positioned.fill(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      Colors.transparent,
-                                      Colors.transparent,
-                                      Colors.black.withOpacity(0.8),
-                                    ],
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
+                      Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          SizedBox(
+                            height: 300,
+                            child: Stack(
+                              children: [
+                                Positioned.fill(
+                                  child: Image.network(
+                                    "https://image.tmdb.org/t/p/original/${moviedetail.backDropPath}",
+                                    fit: BoxFit.fill,
                                   ),
                                 ),
-                              ),
+                                Positioned.fill(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Colors.transparent,
+                                          Colors.transparent,
+                                          Colors.black.withOpacity(0.9),
+                                        ],
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                          Positioned(
+                              bottom:
+                                  -40, // Adjust this value as needed to get the desired overflow effect
+                              right: 10,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.amber,
+                                ),
+                                width: 90,
+                                height: 120,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.network(
+                                    "https://image.tmdb.org/t/p/original/${moviedetail.posterPath}",
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                              ))
+                        ],
                       ),
                       Container(
                         margin: const EdgeInsets.only(left: 30),
-                        // color: Color.fromARGB(66, 224, 9, 9),
                         width: MediaQuery.of(context).size.width,
                         height: MediaQuery.of(context).size.height,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            const SizedBox(
+                              height: 20,
+                            ),
                             SizedBox(
                               height: 50,
                               width: MediaQuery.of(context).size.width,
@@ -113,27 +136,36 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                                     fontWeight: FontWeight.w600),
                               ),
                             ),
-                            Row(
-                              children: [
-                                const Icon(
-                                  Icons.av_timer,
-                                  size: 20,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: Text(moviedetail.runtime.toString()),
-                                ),
-                                const Text("minutes"),
-                                const SizedBox(
-                                  width: 40,
-                                ),
-                                const Icon(
-                                  Icons.star,
-                                  color: Color.fromARGB(255, 232, 185, 46),
-                                  size: 17,
-                                ),
-                                Text(moviedetail.voteAverage.toString())
-                              ],
+                            Container(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4),
+                              margin: const EdgeInsets.only(top: 5),
+                              width: MediaQuery.of(context).size.width * 0.6,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(30),
+                                  color: const Color.fromARGB(255, 59, 58, 58)),
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.av_timer,
+                                    size: 20,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Text(moviedetail.runtime.toString()),
+                                  ),
+                                  const Text("minutes"),
+                                  const SizedBox(
+                                    width: 40,
+                                  ),
+                                  const Icon(
+                                    Icons.star,
+                                    color: Color.fromARGB(255, 232, 185, 46),
+                                    size: 17,
+                                  ),
+                                  Text(moviedetail.voteAverage.toString())
+                                ],
+                              ),
                             ),
                             const SizedBox(
                               height: 20,
@@ -144,7 +176,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                               height: 20,
                             ),
                             const Padding(
-                              padding: EdgeInsets.all(8.0),
+                              padding: EdgeInsets.symmetric(vertical: 8.0),
                               child: Text(
                                 "Story line",
                                 style: TextStyle(
@@ -153,7 +185,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                             ),
                             Text(
                               moviedetail.overview,
-                              style: const TextStyle(height: 1.3, fontSize: 16),
+                              style: const TextStyle(height: 1.3, fontSize: 15),
                             ),
                             const Padding(
                               padding: EdgeInsets.symmetric(vertical: 8.0),

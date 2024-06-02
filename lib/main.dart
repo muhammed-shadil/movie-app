@@ -13,10 +13,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          textTheme: Typography.englishLike2014,
-          iconTheme: IconThemeData(color: Colors.white),
-         ),
-      home: HomeScreen(),
+        textTheme: Typography.englishLike2014,
+        iconTheme: const IconThemeData(color: Color.fromARGB(255, 185, 182, 182)),
+      ),
+      home: const HomeScreen(),
     );
   }
 }

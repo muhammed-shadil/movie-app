@@ -52,7 +52,7 @@ class MovieDetails {
 
     var productionlist = map['production_companies'] as List;
     List<String> productionNames =
-        productionlist.map((genre) => genre['logo_path'] as String).toList();
+        productionlist.map((genre) => genre['name'] as String).toList();
 
     return MovieDetails(
       title: map['title'],

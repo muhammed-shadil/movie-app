@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:movie_app/model/movie_details_model.dart';
 import 'package:movie_app/model/movie_model.dart';
 import 'package:movie_app/services/api.dart';
@@ -21,30 +23,56 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   void initState() {
     print(widget.wholedetails.id);
     moviesdetails = Api().getMoviesdetails(widget.wholedetails.id);
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
       backgroundColor: Colors.black,
       body: SafeArea(
         child: FutureBuilder(
             future: moviesdetails,
             builder: (context, snapshot) {
-              if (!snapshot.hasData) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
-                    child: CircularProgressIndicator(
-                  color: Colors.white,
-                ));
+                  child: CircularProgressIndicator(
+                    color: Colors.red,
+                  ),
+                );
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.error,
+                        color: Colors.red,
+                        size: 50,
+                      ),
+                      const SizedBox(height: 20),
+                      Text(
+                        'Error loading data: ${snapshot.error}',
+                        style: const TextStyle(color: Colors.red),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                );
+              } else if (!snapshot.hasData) {
+                return const Center(
+                  child: Text(
+                    'No data available',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                );
               }
+
               final moviedetail = snapshot.data!;
-              print(moviedetail.posterPath);
+              // print(moviedetail.posterPath);
               return SizedBox(
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
+                height: MediaQuery.of(context).size.height * 1.5,
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
@@ -58,7 +86,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                                 Positioned.fill(
                                   child: Image.network(
                                     "https://image.tmdb.org/t/p/original/${moviedetail.backDropPath}",
-                                    fit: BoxFit.fill,
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
                                 Positioned.fill(
@@ -80,8 +108,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                             ),
                           ),
                           Positioned(
-                              bottom:
-                                  -40, // Adjust this value as needed to get the desired overflow effect
+                              bottom: -40,
                               right: 10,
                               child: Container(
                                 decoration: BoxDecoration(
@@ -96,13 +123,29 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                                     fit: BoxFit.fill,
                                   ),
                                 ),
+                              )),
+                          Positioned(
+                              top: 20,
+                              left: 10,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.black,
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: IconButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    icon: const Icon(
+                                      Icons.arrow_back,
+                                      color: Colors.white,
+                                    )),
                               ))
                         ],
                       ),
                       Container(
                         margin: const EdgeInsets.only(left: 30),
                         width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height,
+                        // height: MediaQuery.of(context).size.height,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -143,7 +186,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 4),
                               margin: const EdgeInsets.only(top: 5),
-                              width: MediaQuery.of(context).size.width * 0.9,
+                              width: 300,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(30),
                                   color: const Color.fromARGB(255, 59, 58, 58)),
@@ -181,7 +224,17 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                                             "18+",
                                             style: TextStyle(color: Colors.red),
                                           ))
-                                      : Container()
+                                      : Container(
+                                          padding: const EdgeInsets.all(2),
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Colors.blue)),
+                                          child: const Text(
+                                            "U/-",
+                                            style:
+                                                TextStyle(color: Colors.blue),
+                                          ),
+                                        )
                                 ],
                               ),
                             ),
@@ -196,7 +249,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                             const Padding(
                               padding: EdgeInsets.symmetric(vertical: 8.0),
                               child: Text(
-                                "Story line",
+                                "Overview",
                                 style: TextStyle(
                                     fontSize: 20, fontWeight: FontWeight.w600),
                               ),
@@ -221,23 +274,40 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                               ),
                             ),
                             Text(moviedetail.revenue.toString()),
-                            SizedBox(
-                              height: 100,
+                            const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 10),
+                              child: Text(
+                                "Production campanies",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                            Container(margin: EdgeInsets.only(bottom: 30),
+                              height: 50,
+                              // MediaQuery.of(context).size.height * 0.06,
                               width: MediaQuery.of(context).size.width,
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
                                 itemCount: moviedetail.production.length,
                                 itemBuilder: (BuildContext context, int index) {
                                   return Container(
+                                    // width:
+                                    //     MediaQuery.of(context).size.width * 0.2,
                                     decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: const Color.fromARGB(
+                                              66, 227, 221, 221)),
                                       borderRadius: BorderRadius.circular(6),
                                     ),
                                     padding: const EdgeInsets.all(8),
                                     margin: const EdgeInsets.all(6),
-                                    child: Image.network(
-                                      "https://image.tmdb.org/t/p/original/${moviedetail.production[index]}",
-                                      fit: BoxFit.fill,
-                                    ),
+                                    child: Text(moviedetail.production[index])
+                                        //  Image.network(
+                                        //     "https://image.tmdb.org/t/p/original/${moviedetail.production[index]}",
+                                        //     fit: BoxFit.fill,
+                                           
+                                        //   )
+                                       
                                   );
                                 },
                               ),

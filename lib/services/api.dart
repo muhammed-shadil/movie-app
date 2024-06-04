@@ -50,24 +50,13 @@ class Api {
   }
 
   Future<MovieDetails> getMoviesdetails(int movieId) async {
-    print("dddddddddddd$movieId");
     final response = await http.get(Uri.parse(
         "https://api.themoviedb.org/3/movie/$movieId?api_key=$apiKey"));
-    print(response.statusCode);
 
     if (response.statusCode == 200) {
-      print(response.body);
       final Map<String, dynamic> data = json.decode(response.body);
-      print(data);
       MovieDetails movie = MovieDetails.fromMap(data);
       return movie;
-      // final List<dynamic> data = json.decode(response.body);
-
-      // List<MovieDetails> movies =
-      //     // data.map((movie) => MovieDetails.fromMap(movie))
-      //     .toList();
-      //       print("rrrrrrrrrrrrrrrrr$movies");
-      // return ;
     } else {
       throw Exception("failed to load upcoming movies");
     }

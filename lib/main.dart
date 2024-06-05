@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:movie_app/controller/provider.dart';
-import 'package:movie_app/view/home_screen.dart';
+import 'package:movie_app/controller/movie_details_provider.dart';
+import 'package:movie_app/controller/movie_provider.dart';
+import 'package:movie_app/view/home_screen/home_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -8,6 +9,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => MovieProvider()),
+        ChangeNotifierProvider(create: (_) => MovieDetailsProvider()),
       ],
       child: const MyApp(),
     ),

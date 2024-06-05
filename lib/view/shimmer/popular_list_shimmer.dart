@@ -13,7 +13,7 @@ class ShimmerPopularList extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             itemCount: 5,
             itemBuilder: (BuildContext context, int index) {
-              return Container(
+              return SizedBox(
                   width: 110,
                   child: Column(children: [
                     Container(

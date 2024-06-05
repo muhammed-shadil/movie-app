@@ -1,9 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:movie_app/controller/provider.dart';
-import 'package:movie_app/view/movie_details_screen.dart';
+import 'package:movie_app/controller/movie_provider.dart';
+import 'package:movie_app/view/movie_Details_screen/movie_details_screen.dart';
 import 'package:provider/provider.dart';
-// import 'package:movie_app/providers/movie_provider.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -17,10 +16,7 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         foregroundColor: Colors.white,
         backgroundColor: Colors.black,
-        leading: IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.menu),
-        ),
+        leading: const Icon(Icons.menu),
         title: const Text("CINEMA"),
         centerTitle: true,
       ),
@@ -43,10 +39,11 @@ class HomeScreen extends StatelessWidget {
                 ),
               )
             else if (movieProvider.errorMessage.isNotEmpty)
-              Center(
+              const Center(
                 child: Text(
-                  movieProvider.errorMessage,
-                  style: const TextStyle(color: Colors.white),
+                  "loading",
+                  // movieProvider.errorMessage,
+                  style: TextStyle(color: Colors.white),
                 ),
               )
             else
@@ -56,7 +53,14 @@ class HomeScreen extends StatelessWidget {
                   final movie = movieProvider.upcomingMovies[index];
                   return GestureDetector(
                     onTap: () {
-                      // Handle movie tap
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => MovieDetailsScreen(
+                            wholedetails: movie,
+                          ),
+                        ),
+                      );
                     },
                     child: Container(
                       width: double.infinity,
@@ -111,11 +115,13 @@ class HomeScreen extends StatelessWidget {
                       child: CircularProgressIndicator(),
                     )
                   : movieProvider.errorMessage.isNotEmpty
-                      ? Center(
-                          child: Text(
-                            movieProvider.errorMessage,
-                            style: const TextStyle(color: Colors.white),
-                          ),
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                          // Text(
+                          //   "loading",
+                          //   // movieProvider.errorMessage,
+                          //   style: TextStyle(color: Colors.white),
+                          // ),
                         )
                       : ListView.builder(
                           scrollDirection: Axis.horizontal,
@@ -189,10 +195,11 @@ class HomeScreen extends StatelessWidget {
                       child: CircularProgressIndicator(),
                     )
                   : movieProvider.errorMessage.isNotEmpty
-                      ? Center(
+                      ? const Center(
                           child: Text(
-                            movieProvider.errorMessage,
-                            style: const TextStyle(color: Colors.white),
+                            "loading",
+                            // movieProvider.errorMessage,
+                            style: TextStyle(color: Colors.white),
                           ),
                         )
                       : ListView.builder(

@@ -7,6 +7,7 @@ class MovieProvider with ChangeNotifier {
   List<Movie> _upcomingMovies = [];
   List<Movie> _popularMovies = [];
   List<Movie> _topratedMovies = [];
+  
   bool _isLoading = false;
   String _errorMessage = '';
 
@@ -18,7 +19,7 @@ class MovieProvider with ChangeNotifier {
 
   MovieProvider() {
     fetchMovies();
-  }
+  } 
 
   Future<void> fetchMovies() async {
     _isLoading = true;

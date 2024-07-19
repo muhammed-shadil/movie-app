@@ -2,7 +2,10 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app/controller/movie_provider.dart';
 import 'package:movie_app/view/movie_Details_screen/movie_details_screen.dart';
+import 'package:movie_app/view/shimmer/carousel_shimmmer.dart';
+import 'package:movie_app/view/shimmer/popular_list_shimmer.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -32,58 +35,46 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             if (movieProvider.isLoading)
-              const SizedBox(
-                height: 350,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              )
+              Shimmercarosel()
             else if (movieProvider.errorMessage.isNotEmpty)
-              const Center(
-                child: Text(
-                  "loading",
-                  // movieProvider.errorMessage,
-                  style: TextStyle(color: Colors.white),
-                ),
-              )
+              Shimmercarosel()
             else
               CarouselSlider.builder(
                 itemCount: movieProvider.upcomingMovies.length,
                 itemBuilder: (context, index, movieIndex) {
                   final movie = movieProvider.upcomingMovies[index];
                   return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => MovieDetailsScreen(
-                            wholedetails: movie,
-                          ),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Image.network(
-                        "https://image.tmdb.org/t/p/original/${movie.posterPath}",
-                        fit: BoxFit.fill,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            color: Colors.grey,
-                            child: const Center(
-                              child: Text(
-                                'Image not available',
-                                style: TextStyle(color: Colors.white),
-                              ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => MovieDetailsScreen(
+                              wholedetails: movie,
                             ),
-                          );
-                        },
-                      ),
-                    ),
-                  );
+                          ),
+                        );
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Image.network(
+                          "https://image.tmdb.org/t/p/original/${movie.posterPath}",
+                          fit: BoxFit.fill,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Container(
+                              color: Colors.grey,
+                              child: const Center(
+                                child: Text(
+                                  'Image not available',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ));
                 },
                 options: CarouselOptions(
                   height: 350,
@@ -111,18 +102,9 @@ class HomeScreen extends StatelessWidget {
             SizedBox(
               height: 185,
               child: movieProvider.isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
+                  ? const ShimmerPopularList()
                   : movieProvider.errorMessage.isNotEmpty
-                      ? const Center(
-                          child: CircularProgressIndicator(),
-                          // Text(
-                          //   "loading",
-                          //   // movieProvider.errorMessage,
-                          //   style: TextStyle(color: Colors.white),
-                          // ),
-                        )
+                      ? const ShimmerPopularList()
                       : ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: movieProvider.popularMovies.length,
@@ -191,17 +173,9 @@ class HomeScreen extends StatelessWidget {
               margin: const EdgeInsets.only(bottom: 10),
               height: 200,
               child: movieProvider.isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
+                  ? const ShimmerPopularList()
                   : movieProvider.errorMessage.isNotEmpty
-                      ? const Center(
-                          child: Text(
-                            "loading",
-                            // movieProvider.errorMessage,
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        )
+                      ? const ShimmerPopularList()
                       : ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: movieProvider.topratedMovies.length,

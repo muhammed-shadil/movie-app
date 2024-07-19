@@ -6,21 +6,29 @@ class ShimmerPopularList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Shimmer.fromColors(
-        baseColor: Colors.grey.shade300,
-        highlightColor: Colors.grey.shade100,
-        child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: 5,
-            itemBuilder: (BuildContext context, int index) {
-              return SizedBox(
-                  width: 110,
-                  child: Column(children: [
-                    Container(
-                      margin: const EdgeInsets.all(8),
-                      width: 110,
-                    ),
-                  ]));
-            }));
+    return ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemCount: 10,
+      itemBuilder: (BuildContext context, int index) {
+        return GestureDetector(
+          onTap: () {},
+          child: SizedBox(
+            width: 110,
+            child: Shimmer.fromColors(
+              baseColor: const Color.fromARGB(255, 37, 37, 37),
+              highlightColor: const Color.fromARGB(255, 119, 119, 119),
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10)),
+                margin: const EdgeInsets.all(8),
+                width: 130,
+                height: 80,
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 }
